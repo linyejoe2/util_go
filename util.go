@@ -2,7 +2,10 @@ package util
 
 import (
 	"fmt"
+	"net/http"
 	"os"
+
+	"github.com/gin-gonic/gin"
 )
 
 // Getenv retrieves the value of the environment variable named by the key.
@@ -71,4 +74,16 @@ func ToInt(val interface{}) int {
 	default:
 		panic(fmt.Sprintf("cannot convert %v to int", v))
 	}
+}
+
+func ResponseBadRequest(c *gin.Context, message string, body interface{}) {
+	c.JSON(http.StatusBadRequest, gin.H{"error": true, "message": message, "body": body})
+}
+
+func ResponseCustom(c *gin.Context, code int, error bool, message string, body interface{}) {
+	c.JSON(code, gin.H{"error": true, "message": message, "body": body})
+}
+
+func ResponseOK(c *gin.Context, message string, body interface{}) {
+	c.JSON(http.StatusOK, gin.H{"error": false, "message": message, "body": body})
 }

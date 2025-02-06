@@ -2,9 +2,12 @@ package util_test
 
 import (
 	"fmt"
+	"net/http"
+	"net/http/httptest"
 	"os"
 	"testing"
 
+	"github.com/gin-gonic/gin"
 	util "github.com/linyejoe2/util_go"
 	"github.com/stretchr/testify/assert"
 )
@@ -111,4 +114,31 @@ func TestToInt(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestResponseBadRequest(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	w := httptest.NewRecorder()
+	c, _ := gin.CreateTestContext(w)
+
+	util.ResponseBadRequest(c, "Bad Request", nil)
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+}
+
+func TestResponseCustom(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	w := httptest.NewRecorder()
+	c, _ := gin.CreateTestContext(w)
+
+	util.ResponseCustom(c, http.StatusForbidden, true, "Forbidden", nil)
+	assert.Equal(t, http.StatusForbidden, w.Code)
+}
+
+func TestResponseOK(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	w := httptest.NewRecorder()
+	c, _ := gin.CreateTestContext(w)
+
+	util.ResponseOK(c, "Success", nil)
+	assert.Equal(t, http.StatusOK, w.Code)
 }
