@@ -142,3 +142,28 @@ func TestResponseOK(t *testing.T) {
 	util.ResponseOK(c, "Success", nil)
 	assert.Equal(t, http.StatusOK, w.Code)
 }
+
+func TestDotProduct(t *testing.T) {
+	// Test case 1: float64 vectors
+	a := []float64{1.0, 2.0, 3.0}
+	b := []float64{4.0, 5.0, 6.0}
+	result := util.DotProduct(a, b)
+	assert.Equal(t, 32.0, result)
+
+	// Test case 2: float32 vectors
+	c := []float32{1.0, 2.0, 3.0}
+	d := []float32{4.0, 5.0, 6.0}
+	result2 := util.DotProduct(c, d)
+	assert.Equal(t, float32(32.0), result2)
+
+	// Test case 3: vectors with different lengths
+	e := []float64{1.0, 2.0, 3.0}
+	f := []float64{4.0, 5.0}
+	defer func() {
+		r := recover()
+		if r == nil {
+			t.Errorf("expected panic on vectors with different lengths, but got none")
+		}
+	}()
+	_ = util.DotProduct(e, f)
+}

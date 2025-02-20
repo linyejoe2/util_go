@@ -87,3 +87,16 @@ func ResponseCustom(c *gin.Context, code int, error bool, message string, body i
 func ResponseOK(c *gin.Context, message string, body interface{}) {
 	c.JSON(http.StatusOK, gin.H{"error": false, "message": message, "body": body})
 }
+
+// DotProduct calculates the dot product of two vectors.
+func DotProduct[T float32 | float64](a, b []T) T {
+	if len(a) != len(b) {
+		panic("vectors must have the same length")
+	}
+
+	var sum T
+	for i := range a {
+		sum += a[i] * b[i]
+	}
+	return sum
+}
